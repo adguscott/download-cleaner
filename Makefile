@@ -1,8 +1,8 @@
 CC = gcc
 CFLAGS = -Wall -g
 
-dc:
-	 $(CC) $(CFLAGS) download-cleaner.c -o dc
+download-cleaner:
+	 $(CC) $(CFLAGS) download-cleaner.c -o download-cleaner
 
 clean:
 	rm -rf dc
