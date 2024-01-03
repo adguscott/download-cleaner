@@ -5,4 +5,4 @@ download-cleaner:
 	 $(CC) $(CFLAGS) download-cleaner.c -o download-cleaner
 
 clean:
-	rm -rf dc
+	rm -rf download-cleaner
