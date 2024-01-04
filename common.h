@@ -11,7 +11,7 @@ struct FilePath {
 
 struct DirType {
     char dir[25];
-    char *types[5];
+    char types[100];
 };
 
 char**
