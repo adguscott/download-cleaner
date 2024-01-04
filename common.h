@@ -35,7 +35,6 @@ string_split(char *string, char delimiter) {
 	    return NULL;
 
     splitwords[wcount] = NULL;
-    free(stringcpy);
 
     return splitwords;
 }
