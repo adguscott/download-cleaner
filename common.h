@@ -54,3 +54,13 @@ int dir_exists(const char *dirname) {
 
     return 0;
 }
+
+int
+directory_valid(char *dirname) {
+    if (dir_exists(dirname)) {
+        return 1;
+    } else {
+        fprintf(stderr, "%s does not exist\n", dirname); 
+        return 0;
+    }
+}

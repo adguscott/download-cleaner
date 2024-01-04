@@ -65,16 +65,6 @@ main(void) {
 }
 
 int
-directory_valid(char *dirname) {
-    if (dir_exists(dirname)) {
-        return 1;
-    } else {
-        fprintf(stderr, "%s does not exist\n", dirname); 
-        return 0;
-    }
-}
-
-int
 validate_directories(void) {
     int valid = 1;
     for (int i = 0; i < dirtypes_length; i++) {
