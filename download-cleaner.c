@@ -88,12 +88,16 @@ validate_directories(void) {
 
 struct DirType
 *get_dir(char ext[]) {
+    char **types;
+    int j = 0;
     for (int i = 0; i < dirtypes_length; i++) {
-        for (int j = 0; dirtypes[i].types[j] != NULL; j++) {
-            if (strcmp(dirtypes[i].types[j], ext) == 0) {
+        types = string_split(dirtypes[i].types, ',');
+        while ((types[j]) != NULL) {
+            if (strcmp(types[j++], ext) == 0) {
                 return &dirtypes[i];
             }
         }
+        free(types);
     }
     
     return NULL;
