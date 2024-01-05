@@ -7,9 +7,3 @@ Open the `config.h` file and modify the following variables:
 * `downloaddir` needs to point to your Downloads directory
 * The `dirtypes` array is an array of the `DirType` struct, specified in the `common.h` file.
     * The `DirType` struct has two fields, `dir`, a `string` to assign the path of a folder, and `types` which is a comma delimited `string` containing the file types associated with this folder.
-
-### Todo
-* Command-line arguments
-* Delete functionality
-* config file to replace `config.h` 
-
