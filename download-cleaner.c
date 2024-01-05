@@ -3,10 +3,11 @@
  * a simple program to move files of types to folders specified in <config.h>
 */
  
-#include <stdio.h>
-#include <string.h>
 #include <dirent.h>
 #include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "common.h"
@@ -15,6 +16,27 @@
 
 int
 main(int argc, char *argv[]) {
+    int opt;
+    
+    while((opt = getopt(argc, argv, "md:")) != -1) {
+        switch(opt) {
+            case 'm':
+                move_files();
+                break;
+            case 'd':
+                printf("Delete function not implemented. Value %d\n", atoi(optarg));
+                break;
+        }
+    }
+    
+    if (argc == 1) {
+        printf("No args given\n");
+    }
+    return 0;
+}
+
+int move_files(void) {
+
     if (!validate_directories()) {
         fprintf(stderr, "Missing valid directories");
         return 1;
@@ -25,7 +47,6 @@ main(int argc, char *argv[]) {
         fprintf(stderr, "Failed to open directory: %s = %s\n", downloaddir, strerror(errno));
         return 1;
     }
-
     struct dirent *file = NULL;
     struct DirType *dirtype = NULL;
 
