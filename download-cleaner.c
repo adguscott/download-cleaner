@@ -7,13 +7,14 @@
 #include <string.h>
 #include <dirent.h>
 #include <errno.h>
+#include <unistd.h>
 
 #include "common.h"
 #include "config.h"
 #include "download-cleaner.h"
 
 int
-main(void) {
+main(int argc, char *argv[]) {
     if (!validate_directories()) {
         fprintf(stderr, "Missing valid directories");
         return 1;
