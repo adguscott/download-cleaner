@@ -1,8 +1,10 @@
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
 #include <dirent.h>
 #include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <time.h>
+#include <unistd.h>
 
 struct FilePath {
     char oldpath[256];
@@ -39,8 +41,8 @@ string_split(char *string, char delimiter) {
     return splitwords;
 }
 
-int file_exists(const char *filename) {
-    return access(filename, F_OK) == 0;
+int file_exists(const char *filepath) {
+    return access(filepath, F_OK) == 0;
 }
 
 int dir_exists(const char *dirname) {
@@ -63,4 +65,28 @@ directory_valid(char *dirname) {
         fprintf(stderr, "%s does not exist\n", dirname); 
         return 0;
     }
+}
+
+int
+seconds_to_days(int seconds) {
+    if (seconds <= 0) {
+        return -1;
+    }
+    
+    return (int)(seconds / 86400);
+}
+
+int
+file_age_days(const char *filepath) {
+    struct stat fstat;
+
+    if (stat(filepath, &fstat) == - 1) {
+        return -1;
+    }
+
+    time_t now = time(NULL);
+
+    int seconds = difftime(now, fstat.st_atime);
+    
+    return seconds_to_days(seconds);
 }
