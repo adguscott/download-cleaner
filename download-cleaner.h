@@ -1,3 +1,4 @@
+int delete_files(int days);
 int move_files(void);
 int validate_directories(void);
 struct DirType *get_dir(char ext[]);
