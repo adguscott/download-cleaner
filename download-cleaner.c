@@ -16,15 +16,16 @@
 
 int
 main(int argc, char *argv[]) {
-    int opt;
+    int opt, err;
     
     while((opt = getopt(argc, argv, "md:")) != -1) {
         switch(opt) {
             case 'm':
-                move_files();
+                err = move_files();
                 break;
             case 'd':
-                printf("Delete function not implemented. Value %d\n", atoi(optarg));
+                int days = atoi(optarg);
+                err = delete_files(days);
                 break;
         }
     }
@@ -32,11 +33,57 @@ main(int argc, char *argv[]) {
     if (argc == 1) {
         printf("No args given\n");
     }
+    
+    return err;
+}
+
+int
+delete_files(int days) {
+    DIR *directory = NULL;
+    if ((directory = opendir(downloaddir)) == NULL) {
+        fprintf(stderr, "Failed to open directory: %s, Error: %s\n", downloaddir, strerror(errno));
+        return 1;
+    }
+
+    struct dirent *file = NULL;
+    while ((file = readdir(directory)) != NULL) {
+        char filename[256] = {0};
+        strcpy(filename, file->d_name);
+
+        if (strcmp(filename, ".") == 0 || strcmp(filename, "..") == 0) {
+            continue;
+        }
+        
+        char *filepath = combine_path(downloaddir, filename);
+        int fdays = file_age_days(filepath);
+
+        if (fdays == -1) {
+            fprintf(stderr, "Error error retrieving age of file %s. Skipping.\n", filename);
+            free(filepath);
+            continue;
+        }
+
+        if (days >= fdays) {
+            if ((remove(filepath)) == -1) {
+                fprintf(stderr, "Failed to delete file/directory: %s, Error:  %s\n", filename, strerror(errno));
+            } else {
+                printf("× %s\n", filename);
+            }
+        }
+
+        free(filepath);
+    }
+    
+    if (closedir(directory) == -1) {
+       fprintf(stderr, "Failed to close directory: %s - %s", downloaddir, strerror(errno));
+       return 1;
+    }
+
     return 0;
 }
 
-int move_files(void) {
-
+int
+move_files(void) {
     if (!validate_directories()) {
         fprintf(stderr, "Missing valid directories");
         return 1;
@@ -47,6 +94,7 @@ int move_files(void) {
         fprintf(stderr, "Failed to open directory: %s = %s\n", downloaddir, strerror(errno));
         return 1;
     }
+
     struct dirent *file = NULL;
     struct DirType *dirtype = NULL;
 
@@ -110,6 +158,7 @@ struct DirType
             }
         }
         free(types);
+        j = 0;
     }
     
     return NULL;
