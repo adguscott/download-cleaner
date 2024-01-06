@@ -41,6 +41,15 @@ string_split(char *string, char delimiter) {
     return splitwords;
 }
 
+char
+*combine_path(const char *path_1, const char *path_2) {
+    char *path = malloc(strlen(path_1) + strlen(path_2));
+
+    sprintf(path, "%s/%s", path_1, path_2);
+
+    return path;
+}
+
 int file_exists(const char *filepath) {
     return access(filepath, F_OK) == 0;
 }
