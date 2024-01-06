@@ -1,2 +1,2 @@
 * Delete functionality
-    Look at stat(sys/stat) & ctime(time.h), convert seconds to days: 86400 seconds = 1 day 
+    Implement file loop, implement delete functionality
