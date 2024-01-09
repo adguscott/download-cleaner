@@ -16,16 +16,16 @@
 
 int
 main(int argc, char *argv[]) {
-    int opt = 0, err = 0;
+    int opt = 0, success_status = 0;
     
     while((opt = getopt(argc, argv, "md:")) != -1) {
         switch(opt) {
             case 'm':
-                err = move_files();
+                success_status = move_files();
                 break;
             case 'd':
                 int days = atoi(optarg);
-                err = delete_files(days);
+                success_status = delete_files(days);
                 break;
         }
     }
@@ -34,7 +34,7 @@ main(int argc, char *argv[]) {
         print_usage();
     }
     
-    return err;
+    return success_status;
 }
 
 int
