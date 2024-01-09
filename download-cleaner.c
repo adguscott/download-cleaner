@@ -16,7 +16,7 @@
 
 int
 main(int argc, char *argv[]) {
-    int opt, err;
+    int opt = 0, err = 0;
     
     while((opt = getopt(argc, argv, "md:")) != -1) {
         switch(opt) {
@@ -31,7 +31,7 @@ main(int argc, char *argv[]) {
     }
     
     if (argc == 1) {
-        printf("No args given\n");
+        print_usage();
     }
     
     return err;
@@ -174,3 +174,10 @@ struct FilePath
     return filepath;
 }
 
+void
+print_usage(void) {
+    printf("usage: download-cleaner <option>\n");
+    printf("Clean up your downloads folder, program can move files to directories specified or delete files with atime older than specified days.\n\n");
+    printf("-m\t\tMove files from the Downloads directory to directories specified in config.h\n");
+    printf("-d=DAYS\t\tDelete all files from the Downloads directory with atime >= DAYS\n");
+}
