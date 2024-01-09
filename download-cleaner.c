@@ -16,25 +16,26 @@
 
 int
 main(int argc, char *argv[]) {
-    int opt = 0, success_status = 0;
+    int opt = 0;
     
-    while((opt = getopt(argc, argv, "md:")) != -1) {
+    while((opt = getopt(argc, argv, "d:hm")) != -1) {
         switch(opt) {
             case 'm':
-                success_status = move_files();
-                break;
+                return move_files();
             case 'd':
                 int days = atoi(optarg);
-                success_status = delete_files(days);
-                break;
+                return delete_files(days);
+            case 'h':
+                print_usage();
+                return 0;
         }
     }
     
     if (argc == 1) {
-        print_usage();
+        print_missing_args();
     }
     
-    return success_status;
+    return 0;
 }
 
 int
@@ -63,7 +64,7 @@ delete_files(int days) {
             continue;
         }
 
-        if (days >= fdays) {
+        if (fdays >= days) {
             if ((remove(filepath)) == -1) {
                 fprintf(stderr, "Failed to delete file/directory: %s, Error:  %s\n", filename, strerror(errno));
             } else {
@@ -97,7 +98,7 @@ move_files(void) {
 
     struct dirent *file = NULL;
     struct DirType *dirtype = NULL;
-
+    char *ext;
     while ((file = readdir(directory)) != NULL) {
         if (file->d_type == DT_DIR) // ignore directories
             continue;
@@ -105,11 +106,17 @@ move_files(void) {
         char filename[256] = {0};
         strcpy(filename, file->d_name);
         
-        char *ext = (strrchr(filename, '.')) + 1;
+        if((ext = (strrchr(filename, '.'))) == NULL) {
+            printf("No file extension for: %s... Skipping...\n", filename);
+            continue;
+        } 
+
+        ext++;
+
         dirtype = get_dir(ext);
 
         if (dirtype == NULL) {
-            printf("Unknown filetype: %s\n", ext);
+            printf("Unknown filetype for: %s\nAdd %s to '<config.h>'\n", filename, ext);
             continue;
         }
         
@@ -180,4 +187,9 @@ print_usage(void) {
     printf("Clean up your downloads folder, program can move files to directories specified or delete files with atime older than specified days.\n\n");
     printf("-m\t\tMove files from the Downloads directory to directories specified in config.h\n");
     printf("-d=DAYS\t\tDelete all files from the Downloads directory with atime >= DAYS\n");
+}
+
+void print_missing_args(void) {
+    printf("download-cleaner: missing args\n");
+    printf("Try 'download-cleaner -h' for more information\n");
 }
