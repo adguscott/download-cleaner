@@ -43,7 +43,7 @@ string_split(char *string, char delimiter) {
 
 char
 *combine_path(const char *path_1, const char *path_2) {
-    char *path = malloc(strlen(path_1) + strlen(path_2));
+    char *path = malloc(strlen(path_1) + strlen(path_2) + 1);
 
     sprintf(path, "%s/%s", path_1, path_2);
 
